@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -11,8 +12,10 @@ class MainViewModel : ViewModel() {
     private val _delay = MutableLiveData<Int?>(null)
     val delay: LiveData<Int?> = _delay
 
+    private var job: Job? = null
     fun startCountdown(delay: Int = 5) {
-        viewModelScope.launch {
+        job?.cancel()
+        job = viewModelScope.launch {
             Countdown.start(delay) {
                 _delay.value = it
             }
@@ -20,6 +23,6 @@ class MainViewModel : ViewModel() {
     }
 
     fun stopCountdown() {
-        Countdown.stop()
+        job?.cancel()
     }
 }

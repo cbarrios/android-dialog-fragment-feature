@@ -6,7 +6,6 @@ object Countdown {
 
     private const val DEFAULT_DELAY = 5
     private var seconds = DEFAULT_DELAY
-    private var stopTimer = false
 
     private suspend fun waitOneSecond(): Int {
         delay(1000)
@@ -15,16 +14,18 @@ object Countdown {
     }
 
     suspend fun start(delay: Int = DEFAULT_DELAY, timer: (Int) -> Unit) {
-        stopTimer = false
+        if (delay < 1) return
         seconds = delay
-        while (!stopTimer) {
-            val value = waitOneSecond()
-            timer(value)
-            if (value == 0) break
+        while (true) {
+            try {
+                val value = waitOneSecond()
+                timer(value)
+                if (value == 0) break
+            } catch (e: Exception) {
+                println("got cancelled")
+                break
+            }
         }
-    }
-
-    fun stop() {
-        stopTimer = true
+        println("out of loop")
     }
 }
