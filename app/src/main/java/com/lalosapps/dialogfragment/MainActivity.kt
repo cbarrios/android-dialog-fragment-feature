@@ -22,14 +22,22 @@ class MainActivity : AppCompatActivity() {
             dialog =
                 supportFragmentManager.findFragmentByTag(LOGOUT_DIALOG_TAG) as MyCustomDialog?
             dialog?.setOnLogoutClick { finish() }
+            dialog?.setOnDismissListener {
+                viewModel.stopCountdown()
+                println("called it on main 2")
+            }
         }
 
         binding.showDialog.setOnClickListener {
             dialog = MyCustomDialog().apply {
                 setOnLogoutClick { finish() }
+                setOnDismissListener {
+                    viewModel.stopCountdown()
+                    println("called it on main 1")
+                }
             }
             dialog?.show(supportFragmentManager, LOGOUT_DIALOG_TAG)
-            viewModel.startCountdown()
+            viewModel.startCountdown(10)
         }
 
         viewModel.delay.observe(this) {

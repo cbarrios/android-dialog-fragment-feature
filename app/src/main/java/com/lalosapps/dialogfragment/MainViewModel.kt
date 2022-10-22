@@ -11,11 +11,15 @@ class MainViewModel : ViewModel() {
     private val _delay = MutableLiveData<Int?>(null)
     val delay: LiveData<Int?> = _delay
 
-    fun startCountdown() {
+    fun startCountdown(delay: Int = 5) {
         viewModelScope.launch {
-            Countdown.start {
+            Countdown.start(delay) {
                 _delay.value = it
             }
         }
+    }
+
+    fun stopCountdown() {
+        Countdown.stop()
     }
 }
