@@ -10,13 +10,22 @@ class MyCustomDialog : DialogFragment() {
 
     private var onLogoutClick: (() -> Unit)? = null
 
+    private lateinit var binding: LogoutDialogBinding
+
     fun setOnLogoutClick(listener: () -> Unit) {
         onLogoutClick = listener
     }
 
+    fun changeLogoutButtonText(seconds: Int) {
+        if (this::binding.isInitialized) {
+            binding.logout.text = getString(R.string.logout_timer, seconds)
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        isCancelable = false
         val view = layoutInflater.inflate(R.layout.logout_dialog, null)
-        val binding = LogoutDialogBinding.bind(view)
+        binding = LogoutDialogBinding.bind(view)
         binding.logout.setOnClickListener { onLogoutClick?.let { it() } }
         return MaterialAlertDialogBuilder(requireContext())
             .setView(view)
