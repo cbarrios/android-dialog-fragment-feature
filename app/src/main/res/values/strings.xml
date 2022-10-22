@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Dialog Fragment</string>
+    <string name="logout">Logout</string>
+    <string name="sure_you_want_to_logout">Are you sure you want to logout?</string>
+</resources>
